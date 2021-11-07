@@ -1,8 +1,11 @@
 package com.udacity.asteroidradar
 
+import android.graphics.BitmapFactory
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.udacity.asteroidradar.main.MainFragment
 
 @BindingAdapter("statusIcon")
 fun bindAsteroidStatusImage(imageView: ImageView, isHazardous: Boolean) {
@@ -38,4 +41,16 @@ fun bindTextViewToKmUnit(textView: TextView, number: Double) {
 fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
     val context = textView.context
     textView.text = String.format(context.getString(R.string.km_s_unit_format), number)
+}
+
+@BindingAdapter("dayImage")
+fun binDayImage(imageView: ImageView, imgSrc: String?){
+    try {
+        val imageStream = java.net.URL(imgSrc.toString()).openStream()
+        val bm = BitmapFactory.decodeStream(imageStream)
+        imageView.setImageBitmap(bm)
+    } catch (e: Exception) {
+        Log.i("MainFragment", "error: "+e)
+    }
+
 }

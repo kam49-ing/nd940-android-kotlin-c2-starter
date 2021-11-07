@@ -1,5 +1,6 @@
 package com.udacity.asteroidradar
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -13,7 +14,12 @@ interface AsteroidDatabaseDao{
     @Update
     suspend fun update(asteroid: Asteroid)
 
-    @Query("SELECT * FROM asteroid ORDER BY id")
-    suspend fun getAllAsteroids():List<Asteroid>?
+    @Query("SELECT * FROM asteroid WHERE id=:id")
+    suspend fun getAsteroid(id:Long):Asteroid?
 
+    @Query("SELECT * FROM asteroid ORDER BY id")
+    fun getAllAsteroids():LiveData<List<Asteroid>?>
+
+    @Query("SELECT * FROM asteroid WHERE close_approach_date >= :date ORDER BY close_approach_date")
+    fun getAsteroidsByDate(date:String):LiveData<List<Asteroid>?>
 }
