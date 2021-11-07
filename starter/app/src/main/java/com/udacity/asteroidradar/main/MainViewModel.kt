@@ -33,7 +33,7 @@ class MainViewModel(var database: AsteroidDatabaseDao, application: Application)
     get()=_status*/
     init {
         _navigateToAsteroidDetail.value = null
-        getDayImage()
+        getDayImageUrl()
     }
 
 
@@ -88,7 +88,7 @@ class MainViewModel(var database: AsteroidDatabaseDao, application: Application)
         }
     }
 
-    fun getDayImage(){
+    private fun getDayImageUrl(){
         viewModelScope.launch {
             try {
                 val dayImage = AsteroidApi.retrofitService.getDayImage()

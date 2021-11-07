@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.squareup.picasso.Picasso
 import com.udacity.asteroidradar.main.MainFragment
 
 @BindingAdapter("statusIcon")
@@ -45,12 +46,8 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
 
 @BindingAdapter("dayImage")
 fun binDayImage(imageView: ImageView, imgSrc: String?){
-    try {
-        val imageStream = java.net.URL(imgSrc.toString()).openStream()
-        val bm = BitmapFactory.decodeStream(imageStream)
-        imageView.setImageBitmap(bm)
-    } catch (e: Exception) {
-        Log.i("MainFragment", "error: "+e)
-    }
+    Picasso.with(imageView.context)
+        .load(imgSrc)
+        .into(imageView)
 
 }
