@@ -6,7 +6,7 @@ import androidx.databinding.BindingAdapter
 
 
 @BindingAdapter("asteroidId")
-fun TextView.setAsteroidId(item:Asteroid?){
+fun TextView.setAsteroidId(item: Asteroid?){
     item?.let {
         text = item.id.toString()
     }
@@ -15,8 +15,8 @@ fun TextView.setAsteroidId(item:Asteroid?){
 fun ImageView.setAsteroidImage(item: Asteroid?){
     item?.let {
         setImageResource(when(item.isPotentiallyHazardous){
-            true->R.drawable.ic_status_potentially_hazardous
-            else->R.drawable.ic_status_normal
+            true-> R.drawable.ic_status_potentially_hazardous
+            else-> R.drawable.ic_status_normal
         })
     }
 }

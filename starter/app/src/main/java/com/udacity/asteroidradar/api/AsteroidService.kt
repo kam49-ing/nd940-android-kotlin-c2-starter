@@ -1,7 +1,7 @@
 package com.udacity.asteroidradar.api
 
-import com.udacity.asteroidradar.Constants.API_KEY
-import com.udacity.asteroidradar.Constants.BASE_URL
+import com.udacity.asteroidradar.constants.Constants.API_KEY
+import com.udacity.asteroidradar.constants.Constants.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET

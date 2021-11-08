@@ -1,21 +1,20 @@
-package com.udacity.asteroidradar
+package com.udacity.asteroidradar.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
+import com.udacity.asteroidradar.Asteroid
+import com.udacity.asteroidradar.PictureOfDay
 
 @Dao
 interface AsteroidDatabaseDao{
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(asteroid: Asteroid)
 
     @Update
     suspend fun update(asteroid: Asteroid)
 
     @Query("SELECT * FROM asteroid WHERE id=:id")
-    suspend fun getAsteroid(id:Long):Asteroid?
+    suspend fun getAsteroid(id:Long): Asteroid?
 
     @Query("SELECT * FROM asteroid ORDER BY id")
     fun getAllAsteroids():LiveData<List<Asteroid>?>
