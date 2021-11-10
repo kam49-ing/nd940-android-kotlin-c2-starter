@@ -8,4 +8,6 @@ data class PictureOfDay(
 
     val title: String,
 
+    val id:Long,
+
     val url: String)
