@@ -3,6 +3,7 @@ package com.udacity.asteroidradar
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.work.*
 import com.udacity.asteroidradar.work.RefreshDataWork
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
         delayedInit()
         setContentView(R.layout.activity_main)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
     }
 
     private fun delayedInit(){
@@ -32,9 +34,7 @@ class MainActivity : AppCompatActivity() {
             .setRequiresBatteryNotLow(true)
             .setRequiresCharging(true)
             .apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    setRequiresDeviceIdle(true)
-                }
+                setRequiresDeviceIdle(true)
             }.build()
         val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWork>(1, TimeUnit.DAYS)
             .setConstraints(constraints)

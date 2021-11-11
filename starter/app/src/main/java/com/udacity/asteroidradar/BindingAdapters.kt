@@ -1,11 +1,8 @@
 package com.udacity.asteroidradar
 
-import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.squareup.picasso.Picasso
 
 
@@ -38,12 +35,9 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
 
 @BindingAdapter("dayImage")
 fun binDayImage(imageView: ImageView, imgSrc: String?){
-        Glide.with(imageView.context)
+        Picasso.with(imageView.context)
             .load(imgSrc)
-            .apply(RequestOptions()
-                .placeholder(R.drawable.loading_animation)
-                .error(R.drawable.ic_broken_image)
-            )
+            .placeholder(R.drawable.loading_animation)
+            .error(R.drawable.ic_broken_image)
             .into(imageView)
-
 }

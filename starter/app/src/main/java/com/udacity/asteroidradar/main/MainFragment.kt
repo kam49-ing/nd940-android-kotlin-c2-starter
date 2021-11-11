@@ -3,15 +3,16 @@ package com.udacity.asteroidradar.main
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.AsteroidViewModelFactory
 import com.udacity.asteroidradar.R
+import com.udacity.asteroidradar.database.AsteroidDatabase
 import com.udacity.asteroidradar.databinding.FragmentMainBinding
-import com.udacity.asteroidradar.main.MainViewModel.*
+import com.udacity.asteroidradar.main.MainViewModel.AsteroidStatus
+import com.udacity.asteroidradar.main.MainViewModel.OptionMenu
+
 
 class MainFragment : Fragment() {
 
@@ -38,23 +39,19 @@ class MainFragment : Fragment() {
         binding.asteroidRecycler.adapter = adapter
 
         //list all asteroids from database from today onwards
-        mainViewModel.asteroids.observe(this.requireActivity(), Observer { asteroids->
-            asteroids?.let {
+        mainViewModel.asteroids.observe(this.requireActivity(), { asteroids ->
+            asteroids?.apply {
                 adapter.submitList(asteroids)
             }
         })
 
-        mainViewModel.asteroidWithFilter?.observe(this.viewLifecycleOwner, Observer {
-            it.let {
-                adapter.submitList(it)
-            }
-        })
 
-        mainViewModel.status.observe(this.viewLifecycleOwner, Observer {
+
+        mainViewModel.status.observe(this.viewLifecycleOwner, {
             if(it == AsteroidStatus.ERROR) {
                 Snackbar.make(
                     this.requireView(),
-                    "Failed to connect to internet",
+                    getString(R.string.connexion_failed_message),
                     Snackbar.LENGTH_LONG
                 ).show()
                 mainViewModel.onSnackBarShowed()
@@ -62,7 +59,7 @@ class MainFragment : Fragment() {
         })
 
         //show detail fragment onclick on an asteroid
-        mainViewModel.navigateToAsteroidDetail.observe(viewLifecycleOwner, Observer { asteroid->
+        mainViewModel.navigateToAsteroidDetail.observe(viewLifecycleOwner, { asteroid->
             asteroid?.let {
                 //navigate to detail fragment
                 this.findNavController().navigate(MainFragmentDirections.actionShowDetail(asteroid))
@@ -83,7 +80,7 @@ class MainFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        viewModel.getAsteroid(
+        viewModel.optionMenu.value =
             when(item.itemId){
                 //shows all saved asteroids
                 R.id.show_buy_menu-> {
@@ -94,14 +91,13 @@ class MainFragment : Fragment() {
                 //shows asteroid for the week
                 else->OptionMenu.SHOW_WEEK
             }
-        )
+
         //showing message
         Snackbar.make(this.requireView(),
             when(item.itemId){
-                R.id.show_buy_menu->"Showing all saved data"
-                R.id.show_rent_menu -> "Showing today's Asteroid"
-                else->"Showing week's Asteroid"
-            } ,
+                R.id.show_buy_menu->getString(R.string.all_data_message)
+                R.id.show_rent_menu -> getString(R.string.today_data_message)
+                else-> getString(R.string.week_data_message)            } ,
             Snackbar.LENGTH_LONG)
             .show()
         return true

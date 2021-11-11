@@ -1,11 +1,7 @@
 package com.udacity.asteroidradar.main
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.google.android.material.snackbar.Snackbar
+import androidx.lifecycle.*
 import com.udacity.asteroidradar.Asteroid
 import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.database.AsteroidDatabaseDao
@@ -20,6 +16,7 @@ class MainViewModel(var database: AsteroidDatabaseDao, application: Application)
         get() = _navigateToAsteroidDetail
     private var _dayImageUrl = MutableLiveData<String>()
     private val asteroidRepository = AsteroidRepository(database)
+    var optionMenu = MutableLiveData(OptionMenu.SHOW_WEEK)
 
 
 
@@ -31,7 +28,6 @@ class MainViewModel(var database: AsteroidDatabaseDao, application: Application)
     val status: LiveData<AsteroidStatus>
     get()=_status
     init {
-        _status.value = AsteroidStatus.LOADING
         viewModelScope.launch {
             asteroidRepository.refreshAsteroid()
         }
@@ -39,22 +35,15 @@ class MainViewModel(var database: AsteroidDatabaseDao, application: Application)
         getDayImageUrl()
     }
 
-    var asteroids:LiveData<List<Asteroid>?> = asteroidRepository.asteroidsOfWeek
-    var asteroidWithFilter:LiveData<List<Asteroid>?>? = null
-
-    fun getAsteroid(optionMenu: OptionMenu) {
-        asteroidWithFilter = when(optionMenu){
+    var asteroids:LiveData<List<Asteroid>?> = Transformations.switchMap(optionMenu){
+        when(it){
             OptionMenu.SHOW_ALL -> asteroidRepository.allAsteroids
             OptionMenu.SHOW_TODAY->asteroidRepository.asteroidOfToday
             else->asteroidRepository.asteroidsOfWeek
         }
-
-
     }
 
-    private suspend fun addAsteroidToDatabase(asteroid: Asteroid){
-        database.insert(asteroid)
-    }
+
 
     suspend fun getAsteroidFromDatabase(asteroidId: Long): Asteroid? {
         return database.getAsteroid(asteroidId)
@@ -71,13 +60,15 @@ class MainViewModel(var database: AsteroidDatabaseDao, application: Application)
     }
 
 
-    private fun getDayImageUrl(){
+     private fun getDayImageUrl(){
         try {
             viewModelScope.launch {
                 try {
+                    _status.value = AsteroidStatus.LOADING
                     val dayImage = AsteroidApi.retrofitService.getDayImage()
                     val day = JSONObject(dayImage).getString("url")
                     _dayImageUrl.value = day
+                    _status.value = AsteroidStatus.DONE
                 } catch (e: Exception) {
                     _status.value =  AsteroidStatus.ERROR
                 }

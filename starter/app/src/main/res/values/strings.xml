@@ -19,4 +19,13 @@
     <string name="not_hazardous_asteroid_image">Not hazardous asteroid image</string>
     <string name="this_is_nasa_s_picture_of_day_showing_nothing_yet">This is NASA\'s picture of day, showing nothing yet</string>
     <string name="nasa_picture_of_day_content_description_format">NASA\'s picture of day: %s</string>
+    <string name="asteroid_image_description">This is the image of the day, download from nasa website.</string>
+    <string name="help_button_description">Help button, it can give you some information some information. Please click on to know more</string>
+    <string name="day_image_description">Image of the day, this is downloaded each day in the nasa website</string>
+    <string name="status_image_descriptio">this is a drawable image that can tell you if the asteroid is potentially dangerous or not</string>
+    <string name="connexion_failed_message">"Failed to connect to internet"</string>
+    <string name="all_data_message">Showing all saved data</string>
+    <string name="today_data_message">Showing atoday asteroid</string>
+    <string name="week_data_message">Showing week asteroid</string>
+
 </resources>
