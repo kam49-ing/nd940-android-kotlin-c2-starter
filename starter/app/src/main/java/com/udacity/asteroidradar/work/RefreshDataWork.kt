@@ -17,6 +17,7 @@ class RefreshDataWork(appContext: Context, params: WorkerParameters):
         val database = AsteroidDatabase.getInstance(applicationContext)
         val repository = AsteroidRepository(database.asteroidDatabaseDao)
         return try {
+            repository.deletePreviousAsteroids()
             repository.refreshAsteroid()
             Result.success()
         }catch (e:HttpException){

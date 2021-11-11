@@ -10,6 +10,9 @@ interface AsteroidDatabaseDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(asteroid: Asteroid)
 
+    @Query("DELETE FROM asteroid WHERE close_approach_date<:today")
+    suspend fun deletePreviousAsteroid(today:String)
+
     @Update
     suspend fun update(asteroid: Asteroid)
 

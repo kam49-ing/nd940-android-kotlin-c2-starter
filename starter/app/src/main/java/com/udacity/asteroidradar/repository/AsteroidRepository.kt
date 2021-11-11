@@ -36,4 +36,8 @@ class AsteroidRepository(private val database: AsteroidDatabaseDao) {
         }
 
     }
+
+    suspend fun deletePreviousAsteroids(){
+        database.deletePreviousAsteroid(today)
+    }
 }
